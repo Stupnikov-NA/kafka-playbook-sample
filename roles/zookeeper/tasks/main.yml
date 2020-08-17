@@ -1,0 +1,87 @@
+---
+- name: Create user group
+  group:
+    name: "{{ zookeeper_group }}"
+
+- name: Create user
+  user:
+    name: "{{ zookeeper_user }}"
+    system: yes
+    group: "{{ zookeeper_group }}"
+
+- name: Create downloads dir
+  file:
+    path: "{{ zookeeper_downloads_dir }}"
+    state: directory
+
+- name: Create binaries destination dir
+  file:
+    path: "{{ zookeeper_dest_dir }}"
+    state: directory
+
+- name: Download package
+  get_url:
+    url: "{{ zookeeper_package_url }}"
+    dest: "{{ zookeeper_downloads_dir }}"
+
+- name: Unarchive package
+  unarchive:
+    src: "{{ zookeeper_downloads_dir }}/{{ zookeeper_package_archive }}"
+    dest: "{{ zookeeper_dest_dir }}"
+    remote_src: yes
+    owner: "{{ zookeeper_user }}"
+    group: "{{ zookeeper_group }}"
+    creates: "{{ zookeeper_dest_dir }}/{{ zookeeper_package_subdir }}"
+
+- name: Create binaries symlink
+  file:
+    src: "{{ zookeeper_dest_dir }}/{{ zookeeper_package_subdir }}"
+    dest: "{{ zookeeper_binaries_dir }}"
+    state: link
+    owner: "{{ zookeeper_user }}"
+    group: "{{ zookeeper_group }}"
+  notify: restart zookeeper
+
+- name: Create config dir
+  file:
+    path: "{{ zookeeper_config_dir }}"
+    state: directory
+    owner: "{{ zookeeper_user }}"
+    group: "{{ zookeeper_group }}"
+
+- name: Create config file
+  template:
+    src: zookeeper.properties.j2
+    dest: "{{ zookeeper_config_dir }}/zookeeper.properties"
+    owner: "{{ zookeeper_user }}"
+    group: "{{ zookeeper_group }}"
+  notify: restart zookeeper
+
+- name: Create data dir
+  file:
+    path: "{{ zookeeper_data_dir }}"
+    state: directory
+    owner: "{{ zookeeper_user }}"
+    group: "{{ zookeeper_group }}"
+
+- name: Create logs dir
+  file:
+    path: "{{ zookeeper_logs_dir }}"
+    state: directory
+    owner: "{{ zookeeper_user }}"
+    group: "{{ zookeeper_group }}"
+
+- name: Prepare service
+  template:
+    src: "zookeeper.service.j2"
+    dest: "/etc/systemd/system/{{ zookeeper_service_name }}"
+  notify: restart zookeeper
+
+- meta: flush_handlers
+
+- name: Enable and start service
+  systemd:
+    name: "{{ zookeeper_service_name }}"
+    state: started
+    enabled: yes
+    daemon_reload: yes

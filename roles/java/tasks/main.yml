@@ -1,0 +1,12 @@
+---
+- name: Install OpenJDK
+  apt:
+    name: "openjdk-{{ jdk_version }}-jre"
+    state: latest
+
+- name: Update Alternatives
+  alternatives:
+    name: java
+    path: "/usr/lib/jvm/java-{{ jdk_version }}-openjdk-amd64/jre/bin/java"
+
+

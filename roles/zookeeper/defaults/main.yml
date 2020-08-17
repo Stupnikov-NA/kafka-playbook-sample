@@ -1,0 +1,18 @@
+---
+# Should be different user, package, and installation directory
+# Kept the same package just as a temporal solution
+zookeeper_group: zookeeper
+zookeeper_user: zookeeper
+zookeeper_scala_version: 2.13
+zookeeper_kafka_version: 2.5.0
+zookeeper_package_archive: "kafka_{{ zookeeper_scala_version }}-{{ zookeeper_kafka_version }}.tgz"
+zookeeper_package_subdir: "kafka_{{ zookeeper_scala_version }}-{{ zookeeper_kafka_version }}"
+zookeeper_package_url: "https://apache-mirror.rbc.ru/pub/apache/kafka/{{ zookeeper_kafka_version }}/{{ zookeeper_package_archive }}"
+zookeeper_downloads_dir: /opt/kafka
+zookeeper_dest_dir: /opt/zookeeper
+zookeeper_binaries_dir: /usr/lib/zookeeper
+zookeeper_data_dir: /tmp/zookeeper
+zookeeper_logs_dir: /var/log/zookeeper
+zookeeper_config_dir: /etc/zookeeper/config
+zookeeper_port: 2181
+zookeeper_service_name: zookeeper.service

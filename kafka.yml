@@ -1,0 +1,16 @@
+---
+- hosts: zookeeper_host
+  become: yes
+  roles:
+    - { role: java }
+    - { role: zookeeper }
+  tags:
+    - zookeeper
+
+- hosts: kafka_broker
+  become: yes
+  roles:
+    - { role: java }
+    - { role: kafka-broker }
+  tags:
+    - kafka

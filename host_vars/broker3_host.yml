@@ -1,0 +1,10 @@
+---
+kafka_broker_id: 1003
+kafka_broker_listener_plaintext_host: 0.0.0.0
+kafka_broker_listener_plaintext_port: 9096
+kafka_broker_listener_ssl_host: 0.0.0.0
+kafka_broker_listener_ssl_port: 9097
+kafka_broker_advertised_listener_plaintext_host: 10.236.30.66
+kafka_broker_advertised_listener_plaintext_port: 9096
+kafka_broker_advertised_listener_ssl_host: 10.236.30.66
+kafka_broker_advertised_listener_ssl_port: 9097

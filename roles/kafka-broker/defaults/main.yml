@@ -1,0 +1,26 @@
+---
+kafka_broker_group: kafka
+kafka_broker_user: kafka
+kafka_broker_scala_version: 2.13
+kafka_broker_kafka_version: 2.5.0
+kafka_broker_package_archive: "kafka_{{ kafka_broker_scala_version }}-{{ kafka_broker_kafka_version }}.tgz"
+kafka_broker_package_subdir: "kafka_{{ kafka_broker_scala_version }}-{{ kafka_broker_kafka_version }}"
+kafka_broker_package_url: "https://apache-mirror.rbc.ru/pub/apache/kafka/{{ kafka_broker_kafka_version }}/{{ kafka_broker_package_archive }}"
+kafka_broker_downloads_dir: /opt/kafka
+kafka_broker_dest_dir: /opt/kafka-broker
+kafka_broker_binaries_dir: /usr/lib/kafka
+kafka_broker_id: 0
+kafka_broker_data_dir: /var/lib/kafka
+kafka_broker_logs_dir: /var/log/kafka
+kafka_broker_config_dir: /etc/kafka/config
+kafka_broker_zookeeper_connect: 127.0.0.1:2181
+kafka_broker_listener_plaintext_host: 0.0.0.0
+kafka_broker_listener_plaintext_port: 9092
+kafka_broker_listener_ssl_host: 0.0.0.0
+kafka_broker_listener_ssl_port: 9093
+kafka_broker_advertised_listener_plaintext_host: 10.236.30.66
+kafka_broker_advertised_listener_plaintext_port: 9092
+kafka_broker_advertised_listener_ssl_host: 10.236.30.66
+kafka_broker_advertised_listener_ssl_port: 9093
+kafka_broker_service_name: kafka.service
+kafka_broker_pid_file: /var/run/kafka.pid

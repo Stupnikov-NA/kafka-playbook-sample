@@ -1,0 +1,16 @@
+# zookeeper.service.j2
+
+[Unit]
+Requires=network.target remote-fs.target
+After=network.target remote-fs.target
+
+[Service]
+Type=simple
+User={{ zookeeper_user }}
+ExecStart=/bin/sh -c '{{ zookeeper_binaries_dir }}/bin/zookeeper-server-start.sh {{ zookeeper_config_dir }}/zookeeper.properties'
+ExecStop=/bin/sh -c '{{ zookeeper_binaries_dir }}/bin/zookeeper-server-stop.sh'
+Environment=LOG_DIR={{ zookeeper_logs_dir }}
+Restart=on-abnormal
+
+[Install]
+WantedBy=multi-user.target

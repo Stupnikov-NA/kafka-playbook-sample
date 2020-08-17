@@ -1,0 +1,17 @@
+# kafka.service.j2
+
+[Unit]
+# Possibly add dependency on 'zookeeper.service' though zk should be moved to another host ideally.
+Requires=network.target remote-fs.target
+After=network.target remote-fs.target
+
+[Service]
+Type=simple
+User={{ kafka_broker_user }}
+ExecStart=/bin/sh -c '{{ kafka_broker_binaries_dir }}/bin/kafka-server-start.sh {{ kafka_broker_config_dir }}/server.properties'
+ExecStop=/bin/sh -c '{{ kafka_broker_binaries_dir }}/bin/kafka-server-stop.sh {{ kafka_broker_config_dir }}/server.properties'
+Environment=LOG_DIR={{ kafka_broker_logs_dir }}
+Restart=on-abnormal
+
+[Install]
+WantedBy=multi-user.target

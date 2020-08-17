@@ -1,0 +1,96 @@
+---
+- name: Create Kafka user group
+  group:
+    name: "{{ kafka_broker_group }}"
+
+- name: Create Kafka user
+  user:
+    name: "{{ kafka_broker_user }}"
+    comment: "for running kafka cluster"
+    system: yes
+    group: "{{ kafka_broker_group }}"
+
+- name: Create downloads dir
+  file:
+    path: "{{ kafka_broker_downloads_dir }}"
+    state: directory
+
+- name: Create Kafka binaries destination dir
+  file:
+    path: "{{ kafka_broker_dest_dir }}"
+    state: directory
+
+- name: Download Kafka package
+  get_url:
+    url: "{{ kafka_broker_package_url }}"
+    dest: "{{ kafka_broker_downloads_dir }}"
+
+- name: Unarchive Kafka package
+  unarchive:
+    src: "{{ kafka_broker_downloads_dir }}/{{ kafka_broker_package_archive }}"
+    dest: "{{ kafka_broker_dest_dir }}"
+    remote_src: yes
+    owner: "{{ kafka_broker_user }}"
+    group: "{{ kafka_broker_group }}"
+    creates: "{{ kafka_broker_dest_dir }}/{{ kafka_broker_package_subdir }}"
+
+- name: Update stop script
+  copy:
+    src: kafka-server-stop.sh
+    dest: "{{ kafka_broker_dest_dir }}/{{ kafka_broker_package_subdir }}/bin/"
+    mode: 0755
+    owner: "{{ kafka_broker_user }}"
+    group: "{{ kafka_broker_group }}"
+
+- name: Create binaries symlink
+  file:
+    src: "{{ kafka_broker_dest_dir }}/{{ kafka_broker_package_subdir }}"
+    dest: "{{ kafka_broker_binaries_dir }}"
+    state: link
+    owner: "{{ kafka_broker_user }}"
+    group: "{{ kafka_broker_group }}"
+  notify: restart kafka broker
+
+- name: Create Kafka config dir
+  file:
+    path: "{{ kafka_broker_config_dir }}"
+    state: directory
+    owner: "{{ kafka_broker_user }}"
+    group: "{{ kafka_broker_group }}"
+
+- name: Create Kafka config file
+  template:
+    src: server.properties.j2
+    dest: "{{ kafka_broker_config_dir }}/server.properties"
+    owner: "{{ kafka_broker_user }}"
+    group: "{{ kafka_broker_group }}"
+  notify: restart kafka broker
+
+- name: Create Kafka data dir
+  file:
+    path: "{{ kafka_broker_data_dir }}"
+    state: directory
+    owner: "{{ kafka_broker_user }}"
+    group: "{{ kafka_broker_group }}"
+
+- name: Create Kafka logs dir
+  file:
+    path: "{{ kafka_broker_logs_dir }}"
+    state: directory
+    owner: "{{ kafka_broker_user }}"
+    group: "{{ kafka_broker_group }}"
+
+- name: Prepare service for Kafka
+  template:
+    src: "kafka.service.j2"
+    dest: "/etc/systemd/system/{{ kafka_broker_service_name }}"
+  notify: restart kafka broker
+
+- meta: flush_handlers
+
+- name: Enable and start service
+  systemd:
+    name: "{{ kafka_broker_service_name }}"
+    state: started
+    enabled: yes
+    daemon_reload: yes

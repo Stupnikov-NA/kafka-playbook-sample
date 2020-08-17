@@ -1,0 +1,20 @@
+---
+all:
+  children:
+    zookeeper:
+      hosts:
+        zookeeper_host:
+          ansible_host: 176.34.71.14
+          ansible_user: ubuntu
+    kafka_broker:
+      hosts:
+        broker1_host:
+          ansible_host: 176.34.71.14
+          ansible_user: ubuntu
+        broker2_host:
+          ansible_host: 176.34.71.14
+          ansible_user: ubuntu
+        broker3_host:
+          ansible_host: 176.34.71.14
+          ansible_user: ubuntu
+
