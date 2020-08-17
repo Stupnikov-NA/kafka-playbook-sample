@@ -23,4 +23,3 @@ kafka_broker_advertised_listener_plaintext_port: 9092
 kafka_broker_advertised_listener_ssl_host: 10.236.30.66
 kafka_broker_advertised_listener_ssl_port: 9093
 kafka_broker_service_name: kafka.service
-kafka_broker_pid_file: /var/run/kafka.pid
