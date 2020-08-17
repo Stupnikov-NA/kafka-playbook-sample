@@ -1,5 +1,5 @@
 ---
-- hosts: zookeeper_host
+- hosts: zookeeper
   become: yes
   roles:
     - { role: java }
