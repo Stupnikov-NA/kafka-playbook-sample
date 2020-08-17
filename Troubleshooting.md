@@ -1,4 +1,4 @@
-# Troubleshooting Test
+# Troubleshooting Guide
 
 * Check if resources are sufficient (disk, memory, inodes)
 
